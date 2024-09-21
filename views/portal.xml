@@ -1,0 +1,68 @@
+<odoo>
+    <data>
+        <template id="portal_my_helpdesk" name="Helpdesk Tickets">
+            <t t-call="website.layout">
+                <div class="container">
+                    <h2>My Helpdesk Tickets</h2>
+                    <a href="/my/helpdesk/ticket/create" class="btn btn-primary">Create Ticket</a>
+                    <table class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>State</th>
+                                <th>Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="tickets" t-as="ticket">
+                                <td><t t-esc="ticket.name"/></td>
+                                <td><t t-esc="ticket.stage_id.name"/></td>
+                                <td><t t-esc="ticket.priority"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_create_helpdesk_ticket" name="Create Helpdesk Ticket">
+            <t t-call="website.layout">
+                <div class="container">
+                    <h2>Create Helpdesk Ticket</h2>
+                    <form method="post" action="/my/helpdesk/ticket/create">
+                        <div class="form-group">
+                            <label for="name">Title</label>
+                            <input type="text" class="form-control" name="name" required="required"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" name="description" required="required"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="category_id">Category</label>
+                            <select class="form-control" name="category_id" id="category_id" required="required">
+                                <option value="">Select Category</option>
+                                <option t-foreach="categories" t-as="category" t-att-value="category.id">
+                                    <t t-esc="category.name"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="form-url-container" style="display:none;">
+                            <label for="form_url">Form URL:</label>
+                            <a id="form-url" href="#" target="_blank">Open Form</a>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <select class="form-control" name="priority">
+                                <option value="0">Low</option>
+                                <option value="1">Medium</option>
+                                <option value="2">High</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
