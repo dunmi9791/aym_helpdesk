@@ -1,60 +1,19 @@
 <odoo>
   <data>
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="aym_helpdesk.list">
-      <field name="name">aym_helpdesk list</field>
-      <field name="model">aym_helpdesk.aym_helpdesk</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
-      </field>
+    <record id="view_helpdesk_category_tree_inherit_form_url" model="ir.ui.view">
+        <field name="name">helpdesk.category.tree.inherit.form.url</field>
+        <field name="model">helpdesk.ticket.category</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.view_helpdesk_category_tree"/>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <!-- Optionally, set the 'editable' attribute if needed -->
+                <attribute name="editable">bottom</attribute>
+            </tree>
+            <!-- Add the 'form_url' field after the 'name' field -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="form_url"/>
+            </xpath>
+        </field>
     </record>
--->
-
-    <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="aym_helpdesk.action_window">
-      <field name="name">aym_helpdesk window</field>
-      <field name="res_model">aym_helpdesk.aym_helpdesk</field>
-      <field name="view_mode">tree,form</field>
-    </record>
--->
-
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="aym_helpdesk.action_server">
-      <field name="name">aym_helpdesk server</field>
-      <field name="model_id" ref="model_aym_helpdesk_aym_helpdesk"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
-      </field>
-    </record>
--->
-
-    <!-- Top menu item -->
-<!--
-    <menuitem name="aym_helpdesk" id="aym_helpdesk.menu_root"/>
--->
-    <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="aym_helpdesk.menu_1" parent="aym_helpdesk.menu_root"/>
-    <menuitem name="Menu 2" id="aym_helpdesk.menu_2" parent="aym_helpdesk.menu_root"/>
--->
-    <!-- actions -->
-<!--
-    <menuitem name="List" id="aym_helpdesk.menu_1_list" parent="aym_helpdesk.menu_1"
-              action="aym_helpdesk.action_window"/>
-    <menuitem name="Server to list" id="aym_helpdesk" parent="aym_helpdesk.menu_2"
-              action="aym_helpdesk.action_server"/>
--->
   </data>
 </odoo>
