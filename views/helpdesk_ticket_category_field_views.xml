@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Define the menu item -->
+    <record id="action_helpdesk_category_field" model="ir.actions.act_window">
+        <field name="name">Category Fields</field>
+        <field name="res_model">helpdesk.ticket.category.field</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>
+                Define custom fields for each helpdesk category.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_helpdesk_category_field"
+              name="Category Fields"
+              parent="helpdesk_mgmt.helpdesk_ticket_config_main_menu"
+              action="action_helpdesk_category_field"
+              sequence="20"/>
+
+
+    <record id="view_helpdesk_category_field_tree" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.category.field.tree</field>
+        <field name="model">helpdesk.ticket.category.field</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="field_type"/>
+                <field name="required"/>
+                <field name="sequence"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_helpdesk_category_field_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.category.field.form</field>
+        <field name="model">helpdesk.ticket.category.field</field>
+        <field name="arch" type="xml">
+            <form string="Category Field">
+                <sheet>
+                    <group>
+                        <field name="category_id"/>
+                        <field name="name"/>
+                        <field name="field_type"/>
+                        <field name="required"/>
+                        <field name="sequence"/>
+                    </group>
+                    <group attrs="{'invisible': [('field_type', '!=', 'selection')]}">
+                        <field name="selection_options"/>
+                    </group>
+                    <group>
+                        <field name="help_text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

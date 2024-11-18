@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="create_ticket_form" name="Create Helpdesk Ticket Form">
+        <t t-name="helpdesk.create_ticket_form">
+            <form action="/helpdesk/create_ticket/submit" method="post">
+                <label for="category">Select Category:</label>
+                <select id="category" name="category_id" required="required">
+                    <option value="">Select a Category</option>
+                    <t t-foreach="categories" t-as="category">
+                        <option t-att-value="category.id"><t t-esc="category.name"/></option>
+                    </t>
+                </select>
+                <div id="dynamic-fields-container"></div>
+                <input type="text" name="name" placeholder="Ticket Name" required="required" />
+                <textarea name="description" placeholder="Description"></textarea>
+                <button type="submit">Create Ticket</button>
+                <t t-if="error">
+                    <p style="color: red;"><t t-esc="error"/></p>
+                </t>
+            </form>
+        </t>
+    </template>
+</odoo>

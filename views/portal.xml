@@ -2,65 +2,216 @@
     <data>
         <template id="portal_my_helpdesk" name="Helpdesk Tickets">
             <t t-call="website.layout">
-                <div class="container">
-                    <h2>My Helpdesk Tickets</h2>
-                    <a href="/my/helpdesk/ticket/create" class="btn btn-primary">Create Ticket</a>
-                    <table class="table table-striped mt-3">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>State</th>
-                                <th>Priority</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr t-foreach="tickets" t-as="ticket">
-                                <td><t t-esc="ticket.name"/></td>
-                                <td><t t-esc="ticket.stage_id.name"/></td>
-                                <td><t t-esc="ticket.priority"/></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="container py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">My Helpdesk Tickets</h2>
+                        <a href="/my/helpdesk/ticket/create" class="btn btn-primary">
+                            <i class="fa fa-plus-circle me-2"/>Create New Ticket
+                        </a>
+                    </div>
+                    <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="border-0">Title</th>
+                                    <th class="border-0">State</th>
+                                    <th class="border-0">Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="tickets" t-as="ticket">
+                                    <td class="align-middle">
+                                        <span class="fw-medium"><t t-esc="ticket.name"/></span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span t-attf-class="badge bg-#{ticket.stage_id.name == 'Done' and 'success' or (ticket.stage_id.name == 'In Progress' and 'warning' or 'info')} rounded-pill">
+                                            <t t-esc="ticket.stage_id.name"/>
+                                        </span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="d-flex align-items-center">
+                                            <i t-if="ticket.priority == '3'" class="fa fa-exclamation-circle text-danger me-1"/>
+                                            <i t-elif="ticket.priority == '2'" class="fa fa-arrow-up text-warning me-1"/>
+                                            <i t-elif="ticket.priority == '1'" class="fa fa-arrow-right text-info me-1"/>
+                                            <span><t t-esc="ticket.priority"/></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </t>
         </template>
 
-        <template id="portal_create_helpdesk_ticket" name="Create Helpdesk Ticket">
+        <template id="portal_create_helpdesk_ticket_form" name="Create Helpdesk Ticket">
             <t t-call="website.layout">
-                <div class="container">
-                    <h2>Create Helpdesk Ticket</h2>
-                    <form method="post" action="/my/helpdesk/ticket/create">
-                        <div class="form-group">
-                            <label for="name">Title</label>
-                            <input type="text" class="form-control" name="name" required="required"/>
+            <t t-name="aym_helpdesk.portal_create_helpdesk_ticket_form">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-white py-3">
+                                    <h3 class="card-title mb-0">Create New Support Ticket</h3>
+                                </div>
+                                <div class="card-body">
+                                    <t t-if="errors">
+                                        <div class="alert alert-danger" role="alert">
+                                            <ul class="list-unstyled mb-0">
+                                                <t t-foreach="errors" t-as="error">
+                                                    <li><i class="fa fa-exclamation-circle me-2"/><t t-esc="error"/></li>
+                                                </t>
+                                            </ul>
+                                        </div>
+                                    </t>
+                                    <form action="/my/helpdesk/form/submit" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+                                        <input type="hidden" name="category_id" t-att-value="category.id"/>
+                                        <div class="mb-3">
+                                            <label class="form-label">Subject</label>
+                                            <input type="text" name="subject" required="required" class="form-control" placeholder="Brief description of your issue"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea name="description" class="form-control" rows="5" placeholder="Please provide detailed information about your issue"></textarea>
+                                        </div>
+                                        <!-- Dynamically render custom fields -->
+                                        <t t-foreach="fields" t-as="field">
+                                            <div class="mb-3">
+                                                <label class="form-label" t-esc="field.name"/>
+                                                <t t-if="field.field_type in ('char', 'text')">
+                                                    <input type="text" t-att-name="'field_%s' % field.id" class="form-control"/>
+                                                </t>
+                                                <t t-if="field.field_type == 'integer'">
+                                                    <input type="number" t-att-name="'field_%s' % field.id" class="form-control"/>
+                                                </t>
+                                                <t t-if="field.field_type == 'float'">
+                                                    <input type="number" step="any" t-att-name="'field_%s' % field.id" class="form-control"/>
+                                                </t>
+                                                <t t-if="field.field_type == 'selection'">
+                                                    <select t-att-name="'field_%s' % field.id" class="form-select">
+                                                        <option value="">Select an option</option>
+                                                        <t t-foreach="field.selection_options.split(',')" t-as="option">
+                                                            <option t-att-value="option.strip()">
+                                                                <t t-esc="option.strip()"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </t>
+                                                <t t-if="field.field_type == 'date'">
+                                                    <input type="date" t-att-name="'field_%s' % field.id" class="form-control"/>
+                                                </t>
+                                                <t t-if="field.field_type == 'datetime'">
+                                                    <input type="datetime-local" t-att-name="'field_%s' % field.id" class="form-control"/>
+                                                </t>
+                                                <t t-if="field.field_type == 'boolean'">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" t-att-name="'field_%s' % field.id" class="form-check-input"/>
+                                                        <label class="form-check-label" t-esc="field.name"/>
+                                                    </div>
+                                                </t>
+                                                <t t-if="field.field_type == 'binary'">
+                                                    <div class="input-group">
+                                                        <input type="file" t-att-name="'field_%s' % field.id" class="form-control"/>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </t>
+                                        <div class="text-end mt-4">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fa fa-paper-plane me-2"/>Submit Ticket
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" name="description" required="required"></textarea>
+                    </div>
+                </div>
+            </t>
+            </t>
+        </template>
+
+        <template id="portal_ticket_details" name="Ticket Details">
+            <t t-call="website.layout">
+                <div class="container py-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white py-3">
+                            <h3 class="card-title mb-0">Ticket Details</h3>
                         </div>
-                        <div class="form-group">
-                            <label for="category_id">Category</label>
-                            <select class="form-control" name="category_id" id="category_id" required="required">
-                                <option value="">Select Category</option>
-                                <option t-foreach="categories" t-as="category" t-att-value="category.id">
-                                    <t t-esc="category.name"/>
-                                </option>
-                            </select>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h4><t t-esc="ticket.name"/></h4>
+                                <p class="text-muted mb-0"><t t-esc="ticket.description"/></p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <t t-foreach="ticket.custom_field_ids" t-as="custom_field">
+                                            <tr>
+                                                <th class="w-25"><t t-esc="custom_field.field_id.name"/></th>
+                                                <td>
+                                                    <t t-if="custom_field.field_id.field_type == 'binary' and custom_field.value_binary">
+                                                        <a t-att-href="'/my/helpdesk/download/%s' % custom_field.id" 
+                                                           class="btn btn-sm btn-secondary">
+                                                            <i class="fa fa-download me-2"/>
+                                                            Download <t t-esc="custom_field.filename"/>
+                                                        </a>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <t t-esc="custom_field.value_display"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="form-group" id="form-url-container" style="display:none;">
-                            <label for="form_url">Form URL:</label>
-                            <a id="form-url" href="#" target="_blank">Open Form</a>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_select_category" name="Select Ticket Category">
+            <t t-call="website.layout">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="text-center mb-5">
+                                <h2 class="display-6 mb-3">How can we help you today?</h2>
+                                <p class="text-muted">Select a category that best matches your issue</p>
+                            </div>
+                            <div class="row row-cols-1 row-cols-md-2 g-4">
+                                <t t-foreach="categories" t-as="category">
+                                    <div class="col">
+                                        <a t-att-href="'/my/helpdesk/ticket/create?category_id=%s' % category.id" 
+                                           class="text-decoration-none">
+                                            <div class="card h-100 shadow-sm hover-shadow transition">
+                                                <div class="card-body p-4">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <div class="icon-circle bg-primary bg-opacity-10 text-primary me-3">
+                                                            <i t-attf-class="fa fa-#{category.icon or 'ticket'} fa-fw"/>
+                                                        </div>
+                                                        <h5 class="card-title mb-0 text-primary">
+                                                            <t t-esc="category.name"/>
+                                                        </h5>
+                                                    </div>
+                                                    <p t-if="category.functional_area" class="card-text text-muted mb-0">
+                                                        <t t-esc="category.functional_area"/>
+                                                    </p>
+                                                </div>
+                                                <div class="card-footer bg-white border-0 p-4 pt-0">
+                                                    <span class="btn btn-link text-primary p-0">
+                                                        Select Category <i class="fa fa-arrow-right ms-2"/>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="priority">Priority</label>
-                            <select class="form-control" name="priority">
-                                <option value="0">Low</option>
-                                <option value="1">Medium</option>
-                                <option value="2">High</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                    </div>
                 </div>
             </t>
         </template>

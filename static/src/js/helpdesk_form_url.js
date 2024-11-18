@@ -1,4 +1,4 @@
-odoo.define('your_module_name.helpdesk_form_url', function (require) {
+odoo.define('aym_helpdesk.helpdesk_form_url', function (require) {
     'use strict';
 
     var ajax = require('web.ajax');  // Make sure you use Odoo's ajax module
@@ -27,3 +27,4 @@ odoo.define('your_module_name.helpdesk_form_url', function (require) {
         });
     });
 });
+

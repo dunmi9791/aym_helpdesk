@@ -24,10 +24,12 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
+        'views/helpdesk_ticket_templates.xml',
         'views/portal.xml',
+        'views/helpdesk_ticket_category_field_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
@@ -36,6 +38,7 @@
     'assets': {
         'web.assets_frontend': [
             'aym_helpdesk/static/src/js/helpdesk_form_url.js',
+            'aym_helpdesk/static/src/js/dynamic_helpdesk_form.js',
         ],
     },
 }

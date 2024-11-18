@@ -20,23 +20,50 @@
         </t>
     </template>
         <template id="portal_select_category" name="Select Helpdesk Category">
-        <t t-call="portal.portal_layout">
-            <div class="container">
-                <h1>Select a Helpdesk Category</h1>
-                <form action="/my/helpdesk/ticket/create" method="post">
-                    <div class="form-group">
-                        <label for="category_id">Category:</label>
-                        <select name="category_id" id="category_id" class="form-control">
-                            <t t-foreach="categories" t-as="category">
-                                <option t-att-value="category.id"><t t-esc="category.name"/></option>
-                            </t>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Proceed to Form</button>
-                </form>
-            </div>
-        </t>
+<!--        <t t-call="portal.portal_layout">-->
+<!--            <div class="container">-->
+<!--                <h1>Select a Helpdesk Category</h1>-->
+<!--                <form action="/my/helpdesk/ticket/create" method="post">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="category_id">Category:</label>-->
+<!--                        <select name="category_id" id="category_id" class="form-control">-->
+<!--                            <t t-foreach="categories" t-as="category">-->
+<!--                                <option t-att-value="category.id"><t t-esc="category.name"/></option>-->
+<!--                            </t>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <button type="submit" class="btn btn-primary">Proceed to Form</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </t>-->
+            <t t-name="aym_helpdesk.portal_select_category">
+    <form action="/my/helpdesk/ticket/create" method="post">
+        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+        <label for="category_id">Select Category:</label>
+        <select name="category_id" id="category_id" required="required">
+            <option value="">Select a category</option>
+            <t t-foreach="categories" t-as="category">
+                <option t-att-value="category.id">
+                    <t t-esc="category.name"/>
+                </option>
+            </t>
+        </select>
+        <button type="submit">Continue</button>
+    </form>
+</t>
     </template>
+        <template id="ticket_submission_success" name="Ticket Submission Success" inherit_id="website.layout">
+        <xpath expr="//main" position="inside">
+            <section id="success-message" class="my-5">
+                <div class="container">
+                    <h1>Your ticket has been submitted successfully!</h1>
+                    <p>We will get back to you shortly.</p>
+                    <a href="/my/helpdesk" class="btn btn-primary">View My Tickets</a>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
 
 
     </data>

@@ -11,8 +11,34 @@
             </tree>
             <!-- Add the 'form_url' field after the 'name' field -->
             <xpath expr="//field[@name='name']" position="after">
+                <field name="icon"/>
                 <field name="form_url"/>
+                <field name="applicable_fields"/>
+                <field name="dynamic_states"/>
             </xpath>
+        </field>
+    </record>
+      <record id="view_helpdesk_ticket_form_inherit_custom_fields" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.custom.fields</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add a new page in the notebook -->
+            <xpath expr="//notebook" position="inside">
+            <!-- Include the field used in attrs -->
+            <field name="custom_field_ids" invisible="1"/>
+            <page string="Custom Fields" attrs="{'invisible': [('custom_field_ids', '=', False)]}">
+                <field name="custom_field_ids" nolabel="1">
+                    <tree editable="false">
+                        <field name="field_id" string="Field" />
+                        <field name="value_display" string="Value" attrs="{'invisible': [('field_type', '=', 'binary')]}"/>
+                        <field name="field_type" string="Type" invisible="1"/>
+                        <field name="filename" invisible="1"/>
+                        <field name="value_binary" widget="binary" filename="filename" string="File" attrs="{'invisible': [('field_type', '!=', 'binary')]}"/>
+                    </tree>
+                </field>
+            </page>
+        </xpath>
         </field>
     </record>
   </data>
