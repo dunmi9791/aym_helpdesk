@@ -130,7 +130,7 @@ class HelpdeskPortal(http.Controller):
 
         # Create the ticket
         request.env['helpdesk.ticket'].sudo().create(vals)
-        return request.render('aym_helpdesk.ticket_submission_success')
+        return request.render('aym_helpdesk.ticket_submitted', {})
 
     @http.route(['/my/helpdesk/download/<int:field_id>'], type='http', auth='user', website=True)
     def download_attachment(self, field_id, **kw):

@@ -52,7 +52,8 @@
     </form>
 </t>
     </template>
-        <template id="ticket_submission_success" name="Ticket Submission Success" inherit_id="website.layout">
+    <!--
+    <template id="ticket_submission_success" name="Ticket Submission Success" inherit_id="website.layout">
         <xpath expr="//main" position="inside">
             <section id="success-message" class="my-5">
                 <div class="container">
@@ -63,8 +64,6 @@
             </section>
         </xpath>
     </template>
-
-
-
+    -->
     </data>
 </odoo>

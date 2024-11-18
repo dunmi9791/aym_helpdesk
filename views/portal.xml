@@ -215,5 +215,30 @@
                 </div>
             </t>
         </template>
+
+        <template id="ticket_submitted" name="Ticket Submitted">
+            <t t-call="website.layout">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="card shadow-sm border-success">
+                                <div class="card-body text-center p-5">
+                                    <div class="mb-4">
+                                        <i class="fa fa-check-circle text-success fa-4x"/>
+                                    </div>
+                                    <h2 class="mb-3">Thank You!</h2>
+                                    <p class="text-muted mb-4">Your ticket has been submitted successfully. We'll get back to you soon.</p>
+                                    <div>
+                                        <a href="/my/helpdesk" class="btn btn-primary">
+                                            <i class="fa fa-list me-2"/>View My Tickets
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
     </data>
 </odoo>
