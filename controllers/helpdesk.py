@@ -126,7 +126,7 @@ class HelpdeskPortal(http.Controller):
             })
 
         vals['custom_field_ids'] = custom_fields
-        _logger.info('Processed field %s of type %s with values: %s', field.name, field_type, custom_field_vals)
+        # _logger.info('Processed field %s of type %s with values: %s', field.name, field_type, custom_field_vals)
 
         # Create the ticket
         request.env['helpdesk.ticket'].sudo().create(vals)
