@@ -119,6 +119,12 @@ class HelpdeskTicketCategoryField(models.Model):
     required = fields.Boolean('Required')
     sequence = fields.Integer('Sequence', default=10)
     help_text = fields.Char('Help Text', help='Additional information for the field')
+    active = fields.Boolean(string='Active', default=True)
+
+
+    def toggle_active(self):
+        for record in self:
+            record.active = not record.active
 
 
 class HelpdeskTicketCustomField(models.Model):
